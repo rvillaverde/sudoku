@@ -589,5 +589,5 @@ const documentHeight = () =>
     `${window.innerHeight}px`
   );
 
-documentHeight();
 window.addEventListener("resize", documentHeight);
+window.addEventListener("load", documentHeight);
