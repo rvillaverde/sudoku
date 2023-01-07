@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&family=Space+Mono&display=swap');
 
 :root {
+  --doc-height: 100%;
   --black: #212529;
+  --dark-gray: #495057;
   --medium-gray: #adb5bd;
   --light-gray: #dee2e6;
   --lighter-gray: #e9ecef;
@@ -22,37 +24,44 @@
   box-sizing: border-box;
 }
 
-body {
-  align-items: center;
-  background-color: var(--medium-gray);
-  color: var(--black);
-  display: flex;
-  font-family: var(--font-family);
-  justify-content: center;
-  margin: 0;
-  min-height: 100vh;
-}
-
-
 @media (max-width: 500px) {
   html {
     font-size: 10px;
   }
 }
 
-main {
-  background-color: var(--white);
-  height: max-content;
+body {
+  align-items: center;
+  background-color: var(--dark-gray);
+  color: var(--black);
+  display: flex;
+  font-family: var(--font-family);
+  height: var(--doc-height);
+  justify-content: center;
+  margin: 0;
   padding: 20px;
-  width: max-content;
+}
+
+@media (max-width: 500px) {
+  body {
+    padding: 20px 0;
+  }
+}
+
+main {
+  align-items: center;
+  background-color: var(--white);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  height: max-content;
+  max-height: 100%;
+  overflow: auto;
+  padding: 20px;
+  width: max-content;
 }
 
 @media (max-width: 500px) {
   main {
-    height: 100%;
     padding: 20px 0;
     width: 100%;
   }
@@ -138,9 +147,11 @@ h1 {
   font-family: var(--font-family);
   font-size: 1.6rem;
   outline: none;
-  height: calc(var(--cell-size) - 2px);
+  height: 100%;
+  /* height: calc(var(--cell-size) - 2px); */
   text-align: center;
-  width: calc(var(--cell-size) - 2px);
+  /* width: calc(var(--cell-size) - 2px); */
+  width: 100%;
 }
  
 .sudoku-container .cell.selected,

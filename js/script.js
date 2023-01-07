@@ -3,7 +3,7 @@ const WIDTH = 9;
 const BOX_SIZE = 3;
 
 const NUMBERS = 9;
-const HINTS = 35;
+const HINTS = 33;
 
 const CONTAINER = "sudoku-container";
 // const NUMBERS_CONTAINER = "numbers-container";
@@ -51,11 +51,39 @@ class Grid {
       .forEach((e) => e.classList.add("selected"));
   };
 
+  parseValue = (value) => {
+    if (value === "0") {
+      return 0;
+    }
+
+    if (value === "") {
+      return 0;
+    }
+
+    if (isNaN(value)) {
+      return 0;
+    }
+
+    if (Number(value) > NUMBERS) {
+      return Number(value.charAt(0));
+    }
+
+    if (Number(value) < 0) {
+      return 0;
+    }
+
+    return Number(value);
+  };
+
   handleInput = (e) => {
     const span = e.target.parentElement;
-    const value = Number(e.target.value);
+
+    const value = this.parseValue(e.target.value);
     const x = Number(span.getAttribute("data-x"));
     const y = Number(span.getAttribute("data-y"));
+
+    // As the value to be triggered may have changed from the input value after parsing, update input with the value
+    e.target.value = value === 0 ? "" : value;
 
     document
       .querySelectorAll(`.cell[data-x="${x}"][data-y="${y}"]`)
@@ -487,16 +515,7 @@ class Game {
     let hints = this.sudoku.width * this.sudoku.height;
 
     while (hints > HINTS) {
-      let x, y;
-
-      try {
-        const cell = cells.shift();
-        x = cell.x;
-        y = cell.y;
-      } catch (e) {
-        console.log("e", e);
-        console.log("cells", cells);
-      }
+      const { x, y } = cells.shift();
 
       if (this.sudoku.isEmpty(x, y)) {
         continue;
@@ -563,3 +582,12 @@ const testBoards = [
 ];
 
 const game = new Game();
+
+const documentHeight = () =>
+  document.documentElement.style.setProperty(
+    "--doc-height",
+    `${window.innerHeight}px`
+  );
+
+documentHeight();
+window.addEventListener("resize", documentHeight);
