@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&family=Space+Mono&display=swap');
 
 :root {
-  --doc-height: 100%;
+  --doc-height: 100vh;
   --black: #212529;
   --dark-gray: #495057;
   --medium-gray: #adb5bd;
@@ -54,8 +54,8 @@ main {
   display: flex;
   flex-direction: column;
   height: max-content;
-  max-height: 100%;
-  overflow: auto;
+  /* max-height: 100%;
+  overflow: auto; */
   padding: 20px;
   width: max-content;
 }
@@ -148,9 +148,7 @@ h1 {
   font-size: 1.6rem;
   outline: none;
   height: 100%;
-  /* height: calc(var(--cell-size) - 2px); */
   text-align: center;
-  /* width: calc(var(--cell-size) - 2px); */
   width: 100%;
 }
  
