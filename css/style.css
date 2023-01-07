@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&family=Space+Mono&display=swap');
+
+:root {
+  --black: #212529;
+  --medium-gray: #adb5bd;
+  --light-gray: #dee2e6;
+  --lighter-gray: #e9ecef;
+  --white: #f8f9fa;
+  --color-selected: #f5efff;
+  --color-error: #ed4337;
+  --cell-size: 48px;
+  --font-family: Lato, sans-serif;
+}
+
+@media (max-width: 500px) {
+  :root {
+    --cell-size: calc((100vw - 32px) / 9);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  align-items: center;
+  background-color: var(--medium-gray);
+  color: var(--black);
+  display: flex;
+  font-family: var(--font-family);
+  justify-content: center;
+  margin: 0;
+  min-height: 100vh;
+}
+
+
+@media (max-width: 500px) {
+  html {
+    font-size: 10px;
+  }
+}
+
+main {
+  background-color: var(--white);
+  height: max-content;
+  padding: 20px;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 500px) {
+  main {
+    height: 100%;
+    padding: 20px 0;
+    width: 100%;
+  }
+}
+
+h1 {
+  margin: 0;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 2.4rem;
+}
+
+.sudoku-container,
+.numbers-container {
+  display: grid;
+  border: 1px solid var(--medium-gray);
+  grid-template-columns: repeat(9, 1fr);
+  width: max-content;
+}
+
+.numbers-container {
+  display: none;
+  margin-top: 20px;
+}
+
+.numbers-container .cell {
+  cursor: pointer;
+}
+
+.sudoku-container .cell,
+.numbers-container .cell {
+  align-items: center;
+  border: 1px solid var(--light-gray);
+  display: flex;
+  font-size: 1.6rem;
+  height: var(--cell-size);
+  justify-content: center;
+  width: var(--cell-size);
+}
+
+.numbers-container .cell {
+  border-bottom-color: var(--medium-gray);
+  border-top-color: var(--medium-gray);
+}
+
+.numbers-container .cell:first-child {
+  border-left-color: var(--medium-gray);
+}
+
+.numbers-container .cell:last-child {
+  border-right-color: var(--medium-gray);
+}
+
+.sudoku-container .cell:nth-child(-n + 9) {
+  border-top-color: var(--medium-gray);
+}
+
+.sudoku-container .cell:nth-last-child(-n + 9), 
+.sudoku-container .cell:nth-child(n+18):nth-child(-n+27),
+.sudoku-container .cell:nth-child(n+46):nth-child(-n+54) {
+  border-bottom-color: var(--medium-gray);
+}
+
+.sudoku-container .cell:nth-child(3n) {
+  border-right-color: var(--medium-gray);
+}
+
+.sudoku-container .cell:nth-child(3n+1) {
+  border-left-color: var(--medium-gray);
+}
+
+.sudoku-container .cell input {
+  border: none;
+  font-family: var(--font-family);
+  font-size: 1.6rem;
+  outline: none;
+  height: calc(var(--cell-size) - 2px);
+  text-align: center;
+  width: calc(var(--cell-size) - 2px);
+}
+ 
+.sudoku-container .cell.selected,
+.sudoku-container .cell.selected input {
+  background-color: var(--color-selected);
+}
+
+.sudoku-container .cell.invalid {
+  border-color: var(--color-error);;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
