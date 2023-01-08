@@ -141,6 +141,35 @@ class Grid {
   };
 }
 
+class SudokuIterator {
+  constructor(sudoku) {
+    this.x = 0;
+    this.y = 0;
+    this.sudoku = sudoku;
+  }
+
+  next = () => {
+    if (this.y === this.sudoku.height) {
+      return { done: true };
+    }
+
+    const value = {
+      value: this.sudoku.get(this.x, this.y),
+      x: this.x,
+      y: this.y,
+    };
+
+    this.x++;
+
+    if (this.x === this.sudoku.width) {
+      this.x = 0;
+      this.y++;
+    }
+
+    return { value, done: false };
+  };
+}
+
 // Class representation for Sudoku board
 class Sudoku {
   constructor(board) {
@@ -152,10 +181,8 @@ class Sudoku {
   get cells() {
     const cells = [];
 
-    for (let y = 0; y < this.height; y++) {
-      for (let x = 0; x < this.width; x++) {
-        cells.push(c(x, y));
-      }
+    for (let { x, y } of this) {
+      cells.push(c(x, y));
     }
 
     return cells;
@@ -168,11 +195,9 @@ class Sudoku {
   }
 
   get hasEmptyCells() {
-    for (let y = 0; y < this.height; y++) {
-      for (let x = 0; x < this.width; x++) {
-        if (this.isEmpty(x, y)) {
-          return true;
-        }
+    for (let { x, y } of this) {
+      if (this.isEmpty(x, y)) {
+        return true;
       }
     }
 
@@ -180,11 +205,9 @@ class Sudoku {
   }
 
   get isSolved() {
-    for (let y = 0; y < this.height; y++) {
-      for (let x = 0; x < this.width; x++) {
-        if (!this.isValidCel(x, y)) {
-          return false;
-        }
+    for (let { x, y } of this) {
+      if (!this.isValidCel(x, y)) {
+        return false;
       }
     }
 
@@ -325,6 +348,10 @@ class Sudoku {
   };
 }
 
+Sudoku.prototype[Symbol.iterator] = function () {
+  return new SudokuIterator(this);
+};
+
 class Operations {
   constructor(board) {
     this.sudoku = new Sudoku(board);
@@ -335,11 +362,9 @@ class Operations {
   }
 
   get firstEmptyCel() {
-    for (let y = 0; y < this.sudoku.height; y++) {
-      for (let x = 0; x < this.sudoku.width; x++) {
-        if (this.sudoku.isEmpty(x, y)) {
-          return c(x, y);
-        }
+    for (let { x, y } of this.sudoku) {
+      if (this.sudoku.isEmpty(x, y)) {
+        return c(x, y);
       }
     }
 
@@ -418,37 +443,35 @@ class Validator extends Operations {
   validate = () => {
     const solutions = [];
 
-    for (let y = 0; y < this.sudoku.height; y++) {
-      for (let x = 0; x < this.sudoku.width; x++) {
-        if (!this.sudoku.isEmpty(x, y)) {
-          continue;
-        }
+    for (let { x, y } of this.sudoku) {
+      if (!this.sudoku.isEmpty(x, y)) {
+        continue;
+      }
 
-        const candidates = this.getCandidates(x, y).shuffle();
+      const candidates = this.getCandidates(x, y).shuffle();
 
-        while (candidates.length) {
-          const candidate = candidates.shift();
+      while (candidates.length) {
+        const candidate = candidates.shift();
 
-          this.sudoku.set(x, y, candidate);
+        this.sudoku.set(x, y, candidate);
 
-          const generator = new Generator(this.sudoku.board);
+        const generator = new Generator(this.sudoku.board);
 
-          if (generator.hasSolution) {
-            const solution = generator.toString();
+        if (generator.hasSolution) {
+          const solution = generator.toString();
 
-            if (solutions.indexOf(solution) > -1) {
-              continue;
-            }
-
-            if (solutions.length === 0) {
-              solutions.push(solution);
-            } else {
-              this.isValid = false;
-              return;
-            }
-          } else {
-            this.sudoku.unset(x, y);
+          if (solutions.indexOf(solution) > -1) {
+            continue;
           }
+
+          if (solutions.length === 0) {
+            solutions.push(solution);
+          } else {
+            this.isValid = false;
+            return;
+          }
+        } else {
+          this.sudoku.unset(x, y);
         }
       }
     }
